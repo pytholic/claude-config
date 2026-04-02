@@ -66,3 +66,4 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## 5. Miscellaneous
 - Always use .venv if available
 - Always use Context7 MCP for library/API docs without being asked
+- Before saying something doesn't exist or isn't known, web search first — especially for recent versions, releases, or compatibility info
