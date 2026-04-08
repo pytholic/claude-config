@@ -14,10 +14,13 @@ Personal Claude Code configuration — behavioral guidelines, custom skills, and
 ## Skills
 
 - **code-review** — Structured code review with checklist
+- **codebase-research** — Navigate, search, and map codebases to answer structural and locational questions
 - **explain-code** — Visual diagrams and analogies for code explanation
 - **llm-dev** — LLM architecture, fine-tuning, RAG, and agentic workflows
+- **playwright-cli** — Automate browser interactions and work with Playwright tests
 - **python-dev** — SOLID/OOP-driven Python development workflow
 - **systematic-debugging** — Four-phase debugging with root cause analysis
+- **task-handover** — Create structured handover documents for session continuity
 - **write-tests** — Focused pytest coverage for critical paths and edge cases
 
 ## Agents
