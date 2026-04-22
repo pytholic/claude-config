@@ -1,4 +1,4 @@
-# .claude
+# Claude Configuration
 
 Personal Claude Code configuration — behavioral guidelines, custom skills, and agent definitions.
 
@@ -8,20 +8,24 @@ Personal Claude Code configuration — behavioral guidelines, custom skills, and
 |---|---|
 | `CLAUDE.md` | Global behavioral guidelines (think-first, simplicity, surgical changes, goal-driven execution) |
 | `settings.json` | Permissions, enabled plugins, and effort level |
-| `skills/` | Reusable skill definitions for specialized workflows |
+| `skills/` | Reusable skill definitions (git submodule → [pytholic/claude-skills](https://github.com/pytholic/claude-skills)) |
 | `agents/` | Custom agent configurations for delegated tasks |
 
 ## Skills
 
-- **code-review** — Structured code review with checklist
-- **codebase-research** — Navigate, search, and map codebases to answer structural and locational questions
-- **explain-code** — Visual diagrams and analogies for code explanation
-- **llm-dev** — LLM architecture, fine-tuning, RAG, and agentic workflows
-- **playwright-cli** — Automate browser interactions and work with Playwright tests
-- **python-dev** — SOLID/OOP-driven Python development workflow
-- **systematic-debugging** — Four-phase debugging with root cause analysis
-- **task-handover** — Create structured handover documents for session continuity
-- **write-tests** — Focused pytest coverage for critical paths and edge cases
+Skills live in a separate repo and are linked here as a submodule. See [pytholic/claude-skills](https://github.com/pytholic/claude-skills) for the full list and install instructions.
+
+To clone this repo with skills included:
+
+```bash
+git clone --recurse-submodules https://github.com/pytholic/claude-config.git ~/.claude
+```
+
+If you already cloned without `--recurse-submodules`:
+
+```bash
+git submodule update --init
+```
 
 ## Agents
 

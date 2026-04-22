@@ -6,7 +6,6 @@
     ],
     "ask": []
   },
-  "model": "opusplan",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/lunit_haseebraja/.claude/statusline-command.sh"
@@ -30,5 +29,6 @@
       }
     }
   },
-  "effortLevel": "medium"
+  "effortLevel": "medium",
+  "model": "opusplan"
 }
