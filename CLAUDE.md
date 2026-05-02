@@ -91,34 +91,38 @@ Plugin skills (`superpowers:*`, `pr-review-toolkit:*`, etc.) are still fine when
 - Before saying something doesn't exist or isn't known, web search first — especially for recent versions, releases, or compatibility info
 - Always add helper functions after the main function that calls them
 
-## 7. Working Memory (.ai/ directory)
+## 7. HAC — Human-Agent Context (.hac/ directory)
 
-Projects may have a `.ai/` directory that serves as shared working memory between you and the user. It solves the "where were we?" problem across sessions. This is for non-trivial, multi-step, or multi-session work — not for quick fixes or one-off questions.
+Projects may have a `.hac/` directory — a shared context layer between the human and the agent. It solves the "where were we?" problem across sessions. This is for non-trivial, multi-step, or multi-session work — not for quick fixes or one-off questions.
 
-**Bootstrapping (existing projects without .ai/):**
-- If the user asks to "set up working memory", "add .ai", or you begin a multi-session task and no `.ai/` directory exists, create it with:
-  - `.ai/status.md` — pull the project name/description from CLAUDE.md or README. Empty Active/Blocked/Completed sections.
-  - `.ai/decisions.md` — the template header with the ADR format in an HTML comment.
-  - `.ai/tasks/.gitkeep` — empty directory, ready for on-demand task files.
-- If prior plan files exist elsewhere (e.g. `.claude/*.md` plans), offer to migrate them into `.ai/tasks/`.
+**Bootstrapping (existing projects without .hac/):**
+- If the user asks to "set up hac", "add .hac", "set up working memory", or you begin a multi-session task and no `.hac/` directory exists, create it with:
+  - `.hac/README.md` — explains what .hac is and contains the master index table.
+  - `.hac/status.md` — pull the project name/description from CLAUDE.md or README. Empty overview table.
+  - `.hac/decisions.md` — template header with empty quick reference table and ADR format.
+  - `.hac/tasks/.gitkeep` — empty directory, ready for on-demand task files.
+- If prior plan files exist elsewhere (e.g. `.claude/*.md` plans), offer to migrate them into `.hac/tasks/`.
 - Use the templates from the `python-project-scaffold` skill as reference.
 
 **Session start (multi-session tasks only):**
-- Read `.ai/status.md` to understand what's active, blocked, and done.
-- Open the relevant task file linked from status.md before asking "where were we?"
+- Read `.hac/status.md` overview table to understand what's active, blocked, and done.
+- Open the relevant task file linked from the table and read the session log.
 
 **During execution:**
-- For new non-trivial work: create `.ai/tasks/<task-name>.md` with Context, Plan, Notes/Findings, and Open Questions sections. Add a link to it in `status.md` under Active.
+- For new non-trivial work: create `.hac/tasks/<task-name>.md` with the standard template (metadata table, context, plan, notes, questions, session log). Add a row to the `status.md` overview table and the `README.md` master index.
 - Update task file checklists as steps complete.
-- Record discoveries in the Notes/Findings section — things learned during execution that aren't in the plan.
+- Append to the session log at the end of a work block.
+- Record discoveries in the Notes/Findings section.
 
 **Design decisions:**
-- When making a strategic or architectural choice, append to `.ai/decisions.md`.
+- When making a strategic or architectural choice, append to `.hac/decisions.md`.
 - Use the format: Context, Choice, Why, Rejected (what alternatives were ruled out and why).
+- Add a row to the quick reference table at the top of `decisions.md`.
 - Decisions are append-only. Never edit or remove past entries.
 
 **Wrap-up:**
-- Move completed tasks to "Completed" in `status.md` with the date.
-- Update the task file status to `Done (YYYY-MM-DD)`.
+- Update the task row in `status.md` overview table (emoji → ⚪, add date).
+- Update the task file's metadata table status to `⚪ Done (YYYY-MM-DD)`.
+- Append a final session log entry.
 
 **Skip all of this for:** trivial bug fixes, formatting changes, single-file edits, or anything completable in one short session. Use judgment.
