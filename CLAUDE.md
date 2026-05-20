@@ -115,11 +115,11 @@ If the user asks to "set up hac", "add .hac", "set up working memory", or you be
 
 ### During Execution
 
-- **New non-trivial work:** Create `.hac/tasks/<task-name>.md` using the task template from the `hac-init` skill. Add a row to the `status.md` overview table and the `README.md` master index.
+- **New non-trivial work:** Create `.hac/tasks/<task-name>.md` using the task template from the `hac-init` skill. Add a row to the `status.md` overview table (ordered by priority: P0 → P1 → P2; within same priority: Active before Blocked before Review) and the `README.md` master index (newest-first by completion date).
 - **Progress:** Update task file checklists as steps complete.
 - **Session log:** Append to the session log at the end of a work block.
 - **Discoveries:** Record in the Notes/Findings section of the task file.
-- **Parked ideas:** When a useful idea surfaces but is out of scope for the current task, add it to the "Parked Ideas" table in `status.md` with a one-line description and the originating context. Don't create a task file for parked ideas.
+- **Parked ideas:** When a useful idea surfaces but is out of scope for the current task, add it to the "Parked Ideas" table in `status.md` with a one-line description and the originating context. Insert newest-first by date. Don't create a task file for parked ideas.
 
 ### Design Decisions
 
