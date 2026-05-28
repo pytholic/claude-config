@@ -88,6 +88,7 @@ Plugin skills (`superpowers:*`, `pr-review-toolkit:*`, etc.) are still fine when
 
 ## 6. Miscellaneous
 - Always use .venv if available
+- Prefer CLI tools over their MCP equivalents when both are available (e.g., `git`/`gh` over GitHub MCP, `kubectl` over Kubernetes MCP, `aws`/`gcloud` over their MCP counterparts). CLIs use far fewer tokens per operation, are more reliable in practice, and let you pipe with `jq`/`grep`/`awk` so intermediate output stays out of context. Reach for an MCP only when no CLI covers the capability (e.g., Context7 for docs, Notion, Linear).
 - Always use Context7 MCP for library/API docs without being asked
 - Before saying something doesn't exist or isn't known, web search first — especially for recent versions, releases, or compatibility info
 - Always add helper functions after the main function that calls them
