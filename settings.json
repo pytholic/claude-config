@@ -37,6 +37,12 @@
         "source": "github",
         "repo": "pytholic/claude-skills"
       }
+    },
+    "addy-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "addyosmani/agent-skills"
+      }
     }
   },
   "effortLevel": "medium",

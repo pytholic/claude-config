@@ -72,7 +72,8 @@ Rough mapping (not exhaustive — always scan the skill list):
 
 | Task | Prefer | Over |
 |---|---|---|
-| Reviewing diffs / PRs / recent changes | `code-review` | `pr-review-toolkit:*`, `superpowers:receiving-code-review`, generic review |
+| Reviewing diffs / PRs / recent changes | `python-code-review` | `pr-review-toolkit:*`, `superpowers:receiving-code-review`, generic review |
+| Eliciting underspecified requirements | `interview-me` | ad-hoc clarifying questions |
 | Writing pytest tests | `write-tests` | generic test writing, `superpowers:test-driven-development` defaults |
 | Python architecture / implementation | `python-dev` | generic Python coding |
 | Debugging a bug / failing test | `systematic-debugging` | `superpowers:systematic-debugging`, ad-hoc debugging |
