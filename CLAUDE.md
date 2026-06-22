@@ -84,6 +84,7 @@ Rough mapping (not exhaustive — always scan the skill list):
 | Handing off work to another session | `task-handover` | freeform summary |
 | Quick code cleanup after a change | `simplify` | ad-hoc refactoring |
 | Bootstrapping `.hac/` in any project | `hac-init` | manually creating files or copying from `python-project-scaffold` |
+| Writing a PR description | `pr-description` | ad-hoc `gh pr create` prompts, manual template filling |
 
 Plugin skills (`superpowers:*`, `pr-review-toolkit:*`, etc.) are still fine when no personal skill covers the task, or when the user explicitly names one.
 
