@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TOKEN=$(security find-generic-password -s "confluence-lunit" -a "$USER" -w)
+
+export JIRA_URL="https://lunit.atlassian.net/"
+export JIRA_USERNAME="rajahaseeb147@lunit.io"
+export JIRA_API_TOKEN="$TOKEN"
+export CONFLUENCE_URL="https://lunit.atlassian.net/wiki"
+export CONFLUENCE_USERNAME="rajahaseeb147@lunit.io"
+export CONFLUENCE_API_TOKEN="$TOKEN"
+
+exec uvx mcp-atlassian

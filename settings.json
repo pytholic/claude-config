@@ -46,6 +46,7 @@
     }
   },
   "effortLevel": "medium",
+  "tui": "fullscreen",
   "theme": "dark-ansi",
   "editorMode": "normal"
 }
