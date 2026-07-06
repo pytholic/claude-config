@@ -115,6 +115,7 @@ Plugin skills (`superpowers:*`, `pr-review-toolkit:*`, etc.) are still fine when
 
 ### Testing
 - Add tests when behavior changes; doc-only changes don't need new tests unless fixtures/examples change.
+- For private method tests, add double underscore i.e. for `_example_func` use `test__example_func`
 
 ### Naming Conventions
 - **Object-creation prefixes:** *(none)* = fixed fixture value, `make_*` = pure in-memory factory, `create_*` = factory with side effects (DB/API/disk I/O), `build_*` = step-by-step builder pattern.
