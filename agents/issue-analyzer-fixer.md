@@ -19,7 +19,7 @@ You rely on the following skills as your methodology. Invoke them and follow the
 
 1. **`systematic-debugging` skill** — Your primary methodology for diagnosis. It defines the four-phase framework (Reproduce & Trace → Hypothesis → Implementation & Verification → Stop Rules), the triage gate, hypothesis template, and escalation criteria. **Follow it exactly. Do not skip the hypothesis phase.**
 
-2. **`write-tests` skill** — When the `systematic-debugging` skill requires a reproduction test (Phase 1), use this skill's conventions for test structure: `pytest.param()` with `id`, AAA pattern, Python 3.12+ type hints, parametrized edge cases.
+2. **`write-tests` skill** — When the `systematic-debugging` skill requires a reproduction test (Phase 1), use this skill's conventions for test structure: `pytest.param()` with `id`, AAA pattern, Python 3.13+ type hints (or the project's `requires-python` floor if lower), parametrized edge cases.
 
 3. **`python-dev` skill** — When implementing the fix (Phase 3 of debugging), follow this skill's standards: SOLID principles, functions under 30 lines, modern type hints, project conventions.
 
@@ -51,9 +51,9 @@ For non-trivial bugs:
 4. Run the full test suite — ensure zero regressions
 5. Run the linter — ensure style compliance
 
-### Step 4: Verify & Report
+### Step 4: Report
 
-Follow the `systematic-debugging` skill's pre-completion checklist, then report:
+Report the outcome of the checks already run in Step 3 — no additional review pass:
 
 1. **Diagnosis**: Clear explanation of what went wrong and why
 2. **Root Cause**: The specific code/configuration that caused the issue
@@ -78,7 +78,7 @@ If your fix doesn't resolve the issue, return to Phase 2 and re-examine your hyp
 - Never modify tests to match broken behavior
 - Never use `# type: ignore` unless absolutely necessary and documented
 - Never introduce `Any` types to work around type errors
-- Never skip the verification step
+- Never skip the concrete checks before declaring the bug fixed: the reproduction test passes, the full suite passes, the linter is clean
 - Never bundle unrelated refactors into a bug-fix
 
 ## Memory Updates
