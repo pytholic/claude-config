@@ -17,17 +17,15 @@ Before implementing:
 - If a simpler approach exists, say so in a sentence and continue with the task as asked — don't quietly narrow, widen, or transform it.
 - Always plan in top-down manner. High level design first, then break it down into smaller parts.
 
-## 2. Simplicity First
+## 2. Simplicity First — the minimality ladder
 
 **Minimum code that solves the problem. Nothing speculative.**
 
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
+@~/.claude/skills/shared/minimality-ladder.md
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+The ladder is the single test for "is this warranted?" — during implementation, during design, and during review. In a review, name the rung that should have caught each unnecessary abstraction.
+
+(Ladder adapted from ponytail, MIT. Canonical copy: `~/.claude/skills/shared/minimality-ladder.md` — do not inline it here.)
 
 ## 3. Surgical Changes
 
@@ -77,6 +75,7 @@ Rough mapping (not exhaustive — always scan the skill list):
 | Eliciting underspecified requirements | `interview-me` | ad-hoc clarifying questions |
 | Writing pytest tests | `write-tests` | generic test writing, `superpowers:test-driven-development` defaults |
 | Python architecture / implementation | `python-dev` | generic Python coding |
+| Implementing a plan yourself, agent guiding | `guided-implementation` | `goal-workflow` (that's agent-driven) |
 | Debugging a bug / failing test | `systematic-debugging` | `superpowers:systematic-debugging`, ad-hoc debugging |
 | Navigating / mapping an unfamiliar codebase | `codebase-research` | ad-hoc grepping, general-purpose research agents |
 | Explaining code / walkthroughs | `explain-code` | plain prose explanation |
