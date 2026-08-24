@@ -109,12 +109,27 @@ Match the length of written documents (plans, `.hac/` files, handovers, reports)
 - Detect and use whatever the project already has configured (check `pyproject.toml`/deps) rather than assuming specific tools — e.g. for docstring coverage or doc-site generation.
 - Don't chase pyright stub warnings for external dependencies — ignore them, not worth the noise.
 
-### Docstrings
-- Google-style docstrings on all public methods, enforced by lint rules + coverage tooling if configured.
-- One-liners are fine for trivial methods; use `Args/Returns/Raises` only when the signature isn't self-explanatory.
+### Comments & Docstrings
+- Docstrings: Google-style on all public methods, enforced by lint rules + coverage tooling if configured. One-liners are fine for trivial methods; use `Args/Returns/Raises` only when the signature isn't self-explanatory.
+- State purpose only — what it does / what it returns. Don't explain rationale, don't narrate how two callers "must agree," and don't cross-reference other functions or pipeline stages as justification. That's design-doc material (`.hac/decisions.md`), not docstring material.
+- If a non-obvious invariant truly must be flagged, one short clause is enough — not a paragraph.
 - Class-level docstrings go on the class, not `__init__`.
 - Keep module/class docstrings generic — describe purpose and role, not concrete class/function names or implementation details. Names and signatures change; a docstring that has to be touched on every refactor is fragile. Say what the module *does* structurally (e.g. "defines the ports the runner depends on"), not which specific classes do it.
+- Inline comments follow the same rule: explain a non-obvious *what*, not the reasoning behind a design choice or which other file depends on this behaving a certain way. If two things must stay in sync, enforce that with a test or the code structure — not a comment.
 - `Created by @author on <date>` header line is fine to keep (creation date only, not last-touched — that's git blame's job).
+
+**Example:**
+```python
+# Too verbose — explains rationale + cross-references other pipeline stages
+"""True when every BreastView has exactly one output.
+
+Single source of truth for the four-view rule, which both gates CPC blending
+(cross_case_task) and sets each prediction's inference_mode (format_output)...
+"""
+
+# Correct — states purpose, stops
+"""True when every BreastView has exactly one output."""
+```
 
 ### Code Style
 - No blanket `print()` ban — prefer the project logger or `rich.console` for application code. `print()`/`pprint` is fine for quick smoke tests or examples.
@@ -171,19 +186,8 @@ If the user asks to "set up hac", "add .hac", "set up working memory", or you be
 
 ### Status Transitions
 
-| From | To | Trigger |
-|------|----|---------|
-| 🟢 Active | ⚪ Done | Agent or user judges the work complete (e.g. before opening a PR) |
-| 🟢 Active | 🔴 Blocked | External dependency, unresolved question, or pending review blocks progress |
-| 🔴 Blocked | 🟢 Active | Blocker resolved |
-| 🔵 Parked | 🟢 Active | Idea promoted — create a task file, remove from Parked Ideas table |
-| Any | ⚪ Done | Move the row from `status.md` overview to `README.md` master index |
-
-Done is a local judgment, not an external approval. `.hac/` does not mirror PR/review state — the PR is its own review surface. If a task needs human sign-off before it can be considered complete, keep it 🔴 Blocked ("blocked on review of X") rather than reintroducing a review state.
+Symbols: 🟢 Active, 🔴 Blocked, 🔵 Parked, ⚪ Done. Full transition rules, labels, and priority levels are defined once, in the generated `status.md` (canonical copy: `hac-init` skill's template) — do not restate them here.
 
 ### Wrap-Up
 
-- Update the task row in `status.md` overview table (status → ⚪, add date).
-- Move the completed row to the `README.md` master index. If the work never had a task file, use `—` in the `File` column.
-- **If a task file exists:** set its metadata table status to `⚪ Done (YYYY-MM-DD)` and append a final session log entry.
-- **If no task file exists:** stop here. Do not create one.
+Update `status.md` (status → ⚪, date) and move the row to `README.md`'s master index (`—` in `File` if no task file existed). If a task file exists, set its status field and append a final session log entry. Full steps: see the `hac-init` skill's "Common Usage Patterns."
