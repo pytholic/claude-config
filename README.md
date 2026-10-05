@@ -60,6 +60,18 @@ Gives Claude Code read/write access to Confluence and Jira at `lunit.atlassian.n
 
 The wrapper script (`scripts/mcp-atlassian`) reads the token from Keychain and passes it to the MCP server as environment variables. No unlock step needed — macOS handles auth transparently via the login session.
 
+## Editor rules (Zed, Cursor)
+
+Zed (`~/.config/zed/AGENTS.md`) and Cursor (`~/.cursor/rules/personal.mdc`) don't resolve Claude's `@` imports, so their global rules are generated from `CLAUDE.md` with imports inlined. The generated files are not committed.
+
+Run after cloning, and again after editing `CLAUDE.md` or `skills/shared/`:
+
+```bash
+~/.claude/scripts/sync_editor_rules.py
+```
+
+It needs the `skills` submodule (`git submodule update --init`) and exits with an error if an imported file is missing.
+
 ## Agents
 
 - **code-reviewer** — Automated code quality review

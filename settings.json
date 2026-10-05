@@ -2,11 +2,17 @@
   "permissions": {
     "allow": [],
     "deny": [
-      "Read(./.env)"
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/secrets/**)"
     ],
     "ask": []
   },
   "model": "opusplan",
+  "skillOverrides": {
+    "excalidraw-diagram": "off",
+    "llm-dev": "off"
+  },
   "worktree": {
     "baseRef": "fresh"
   },
@@ -47,9 +53,5 @@
   "effortLevel": "medium",
   "tui": "fullscreen",
   "theme": "dark-ansi",
-  "editorMode": "normal",
-  "skillOverrides": {
-    "excalidraw-diagram": "off",
-    "llm-dev": "off"
-  }
+  "editorMode": "normal"
 }
