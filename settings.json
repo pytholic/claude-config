@@ -53,5 +53,6 @@
   "effortLevel": "medium",
   "tui": "fullscreen",
   "theme": "dark-ansi",
-  "editorMode": "normal"
+  "editorMode": "normal",
+  "advisorModel": "opus"
 }
