@@ -104,6 +104,11 @@ Delegate to a subagent only for large tracks of work that are genuinely independ
 ### Written deliverables
 Match the length of written documents (plans, `.hac/` files, handovers, reports) to what the task needs. Cover the substance without padding: no filler sections, redundant summaries, or boilerplate.
 
+### Explanations & output format
+- When explaining, reviewing, or planning for me, write about 80% toward ASD-STE100: short sentences (about 20 words for steps, 25 for descriptions), active voice, one idea per sentence, one term per concept. Keep exact technical terms, identifiers, and numbers unchanged.
+- Do not apply this to code, comments, docstrings, commit messages, config, or any output that a tool or another agent will read.
+- Default format is Markdown. Use HTML only when I ask for it.
+
 ## 8. Coding Conventions
 
 ### Tooling & QA
