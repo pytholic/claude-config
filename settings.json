@@ -9,9 +9,9 @@
     "ask": []
   },
   "model": "opusplan",
-  "skillOverrides": {
-    "excalidraw-diagram": "off",
-    "llm-dev": "off"
+  "attribution": {
+    "commit": "",
+    "pr": ""
   },
   "worktree": {
     "baseRef": "fresh"

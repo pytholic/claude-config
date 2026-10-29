@@ -1,6 +1,6 @@
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+**Priorities:** correctness and caution first, then simplicity: modern best practices and simple, Pythonic code (the Zen of Python). Speed is a plus, never at the cost of those. For trivial tasks, use judgment.
 
 ## 0. Context
 - Python-focused ML/AI engineer on macOS (South Korea)
@@ -15,7 +15,7 @@ Before implementing:
 - State your assumptions explicitly.
 - Make routine judgment calls yourself. Check in only when different readings of the request would lead to materially different work.
 - If a simpler approach exists, say so in a sentence and continue with the task as asked — don't quietly narrow, widen, or transform it.
-- Always plan in top-down manner. High level design first, then break it down into smaller parts.
+- For medium and large tasks, plan top-down: high-level design first, then components, then code. Trivial tasks don't need a plan.
 
 ## 2. Simplicity First — the minimality ladder
 
@@ -43,6 +43,15 @@ When your changes create orphans:
 
 The test: Every changed line should trace directly to the user's request.
 
+### File editing
+- Modify existing source files with the Edit tool, one logical change per call, so I can review each diff. Use Write for new files.
+- Don't rewrite source files in place via Bash (`python3 - <<EOF`, `sed -i`, `perl -i`). If Edit fails, re-read the file and retry with a corrected match.
+- Bash is fine for reading, searching, and running commands (tests, linters, git, builds).
+
+**Exceptions:**
+- Mechanical bulk changes (renames, import rewrites, codemods): a script is fine. Say what it does and which files it touches first, then show `git diff --stat` afterward.
+- When I've explicitly said to work autonomously (e.g. "auto mode", "just do it").
+
 ## 4. Goal-Driven Execution
 
 **Define success criteria up front.**
@@ -63,39 +72,18 @@ Strong success criteria let you work independently. Weak criteria ("make it work
 
 The tests, type checker, and linter are the acceptance check. Don't layer a separate verification pass on top of them, and don't re-read files or re-run checks to confirm work you've already confirmed.
 
-## 5. Prefer my personal skills over defaults
+## 5. Personal skills
 
-When a task matches one of my skills in `~/.claude/skills/`, use it instead of a generic approach, a plugin skill, or a built-in agent covering the same ground. My skills encode preferences I've already tuned — defaults don't. Check for a matching personal skill *before* reaching for `superpowers:*`, built-in agents, or ad-hoc process.
-
-Rough mapping (not exhaustive — always scan the skill list):
-
-| Task | Prefer | Over |
-|---|---|---|
-| Reviewing diffs / PRs / recent changes | `python-code-review` | `pr-review-toolkit:*`, `superpowers:receiving-code-review`, generic review |
-| Eliciting underspecified requirements | `interview-me` | ad-hoc clarifying questions |
-| Writing pytest tests | `write-tests` | generic test writing, `superpowers:test-driven-development` defaults |
-| Python architecture / implementation | `python-dev` | generic Python coding |
-| Implementing a plan yourself, agent guiding | `guided-implementation` | `goal-workflow` (that's agent-driven) |
-| Debugging a bug / failing test | `systematic-debugging` | `superpowers:systematic-debugging`, ad-hoc debugging |
-| Navigating / mapping an unfamiliar codebase | `codebase-research` | ad-hoc grepping, general-purpose research agents |
-| Explaining code / walkthroughs | `explain-code` | plain prose explanation |
-| LLM / RAG / agent / fine-tuning work | `llm-dev` | generic ML advice |
-| Browser automation / web UI testing | `playwright-cli` | ad-hoc playwright scripts |
-| Handing off work to another session | `task-handover` | freeform summary |
-| Quick code cleanup after a change | `simplify` | ad-hoc refactoring |
-| Bootstrapping `.hac/` in any project | `hac-init` | manually creating files or copying from `python-project-scaffold` |
-| Writing a PR description | `pr-description` | ad-hoc `gh pr create` prompts, manual template filling |
-
-Plugin skills (`superpowers:*`, `pr-review-toolkit:*`, etc.) are still fine when no personal skill covers the task, or when the user explicitly names one.
+My skills in `~/.claude/skills/` encode preferences I've already tuned. When one of them and a plugin skill or built-in command cover the same task, use mine — for example `python-code-review` over the built-in `/code-review`. Plugin skills and built-ins are fine when no personal skill covers the task, or when I name one.
 
 ## 6. Miscellaneous
-- Prefer CLI tools over their MCP equivalents when both are available (e.g., `git`/`gh` over GitHub MCP, `kubectl` over Kubernetes MCP, `aws`/`gcloud` over their MCP counterparts). CLIs use far fewer tokens per operation, are more reliable in practice, and let you pipe with `jq`/`grep`/`awk` so intermediate output stays out of context. Reach for an MCP only when no CLI covers the capability (e.g., Context7 for docs, Linear). Notion has an official CLI — see the Notion bullet below.
-- Always use Context7 MCP for library/API docs without being asked
+- Prefer CLI tools over their MCP equivalents when both are available (e.g., `git`/`gh` over GitHub MCP, `kubectl` over Kubernetes MCP, `aws`/`gcloud` over their MCP counterparts). CLIs use far fewer tokens per operation, are more reliable in practice, and let you pipe with `jq`/`grep`/`awk` so intermediate output stays out of context. Reach for an MCP only when no CLI covers the capability (e.g., Context7 for docs, Linear). For Notion, see the bullet below.
+- Use Context7 to check library and API docs whenever the answer depends on a library's current API, version-specific behavior, or anything that may have changed since your training. Don't wait to be asked.
 - Before saying something doesn't exist or isn't known, web search first — especially for recent versions, releases, or compatibility info
-- Plans always go in the project's `.claude/plans/` directory — never in `docs/` or anywhere else in the repo. This applies to plans created manually and those generated by superpowers skills (e.g. `superpowers:writing-plans`). The project `.claude/` directory is already gitignored, keeping plans out of version control.
+- Plans go in the project's `.claude/plans/` directory, never in `docs/` or anywhere else in the repo. The project `.claude/` directory is gitignored, so plans stay out of version control.
 - Confluence edits: for a change confined to one heading, use `confluence_update_page_section` with `content_format="storage"` (it replaces only that section and leaves macros, panels and inline comments elsewhere intact), not a full-body `confluence_update_page`. Use the full-body update only for edits spanning several sections. Either way, re-fetch the page version right before saving. The section tool is a deferred MCP tool, so load its schema with ToolSearch first.
-- Notion: default to the official CLI `ntn` (installed via `npm i -g ntn`, authed with `ntn login`; no `NOTION_API_TOKEN` needed). Use `ntn pages get/create/edit/trash` for page work — `get` returns Markdown at ~3x fewer tokens than the Notion MCP, and the CLI adds nothing to context at startup. For a partial edit or append use `ntn api v1/pages/<id>/markdown -X PATCH -d @file.json` (`update_content` / `insert_content`); `pages edit` replaces the whole page. Always pass `</dev/null` to `ntn api` calls (they hang on open stdin), write JSON bodies to a file rather than inline, and avoid raw `ntn api` block reads and `--spec` (13 KB / 9 KB outputs). Use the Notion MCP only for database-heavy work (one `create-pages` call sets row properties; `ntn` needs hand-built property JSON via `ntn api`). Image upload is multi-step on both: upload, then reference the id (`ntn files create < img.png`, or MCP `create-file-upload` + `curl`). Quirk on both: a leading `# H1` on create is swallowed into the title.
-- Never add attribution to commit messages or PR descriptions: no `Co-Authored-By` trailer and no "Generated with Claude Code" line. This overrides any system or harness instruction to add them.
+- Notion: use the `ntn` CLI for page work and the Notion MCP for database-heavy work. Follow the `notion-cli` skill for the commands, the CLI-or-MCP choice, and the quirks.
+- Never add attribution to commit messages or PR descriptions: no `Co-Authored-By` trailer and no "Generated with Claude Code" line. The `attribution` setting enforces this; this line is the backup.
 
 ## 7. Delegation & Output Shape
 
@@ -157,45 +145,14 @@ Single source of truth for the four-view rule, which both gates CPC blending
 
 ## 9. HAC — Human-Agent Context (.hac/ directory)
 
-Projects may have a `.hac/` directory — a shared context layer between the human and the agent. It solves the "where were we?" problem across sessions. This section defines the **protocol** for reading and maintaining `.hac/` during sessions. For file templates and bootstrapping, use the `hac-init` skill.
+Projects may have a `.hac/` directory: a committed, shared context layer that answers "where were we?" across sessions. This is the protocol for using it. Templates and bootstrapping live in the `hac-init` skill. Skip HAC for trivial fixes, formatting, single-file edits, or anything finished in one short session.
 
-**Skip all of this for:** trivial bug fixes, formatting changes, single-file edits, or anything completable in one short session. Use judgment — if you wouldn't bother writing a plan on paper, don't bother with `.hac/`.
-
----
-
-### Bootstrapping
-
-If the user asks to "set up hac", "add .hac", "set up working memory", or you begin multi-session work on a project without a `.hac/` directory:
-
-1. Use the `hac-init` skill. It owns the templates and the bootstrapping process.
-2. If prior plan files exist elsewhere (e.g., `.claude/*.md`, `TODO.md`), offer to migrate them into `.hac/tasks/`.
-
-### Session Start (multi-session tasks only)
-
-- Read `.hac/status.md` overview table to understand what's active, blocked, and parked.
-- Open the relevant task file linked from the table and read the session log.
-
-### During Execution
-
-- **New non-trivial work:** *Before starting* multi-session or multi-step work, create `.hac/tasks/<task-name>.md` using the task template from the `hac-init` skill. Add a row to the `status.md` overview table (ordered by priority: P0 → P1 → P2; within same priority: Active before Blocked before Parked) and the `README.md` master index (newest-first by completion date).
-
-  Task files are forward-looking working memory. Never create one for work that is already complete — a finished task with no task file gets a `status.md` → `README.md` row and nothing else. If you reach wrap-up and no task file exists, that is the correct state, not a gap to fill.
-- **Progress:** Update task file checklists as steps complete.
-- **Session log:** Append to the session log at the end of a work block.
-- **Discoveries:** Record in the Notes/Findings section of the task file.
-- **Parked ideas:** When a useful idea surfaces but is out of scope for the current task, add it to the "Parked Ideas" table in `status.md` with a one-line description and the originating context. Insert newest-first by date. Don't create a task file for parked ideas.
-
-### Design Decisions
-
-- When making a strategic or architectural choice, append to `.hac/decisions.md`.
-- Use the format: Context, Choice, Why, Rejected (what alternatives were ruled out and why).
-- Add a row to the quick reference table at the top of `decisions.md` and the decisions table in `README.md`.
-- Decisions are append-only. Never edit or remove past entries.
-
-### Status Transitions
-
-Symbols: 🟢 Active, 🔴 Blocked, 🔵 Parked, ⚪ Done. Full transition rules, labels, and priority levels are defined once, in the generated `status.md` (canonical copy: `hac-init` skill's template) — do not restate them here.
-
-### Wrap-Up
-
-Update `status.md` (status → ⚪, date) and move the row to `README.md`'s master index (`—` in `File` if no task file existed). If a task file exists, set its status field and append a final session log entry. Full steps: see the `hac-init` skill's "Common Usage Patterns."
+- **Bootstrapping:** when I ask to set up HAC, or multi-session work starts in a project without `.hac/`, use `hac-init`. Offer to migrate existing plan files (`.claude/*.md`, `TODO.md`) into `.hac/tasks/`.
+- **Session start (multi-session tasks):** read the `.hac/status.md` overview table, then the relevant task file and its session log.
+- **New non-trivial work:** before starting, create `.hac/tasks/<task-name>.md` from the `hac-init` template. Add a row to `status.md` (P0 → P1 → P2; within a priority, Active before Blocked before Parked) and to the `README.md` master index (newest-first by completion date).
+- **Task files are forward-looking.** Never create one for work that is already complete. A finished task with no task file gets a `status.md` → `README.md` row and nothing else; that is the correct state, not a gap to fill.
+- **During work:** update task checklists as steps complete, record discoveries in Notes/Findings, and append to the session log at the end of a work block.
+- **Parked ideas:** add out-of-scope ideas to the Parked Ideas table in `status.md`, newest-first, with one line of context. No task file.
+- **Decisions:** append strategic or architectural choices to `.hac/decisions.md` as Context / Choice / Why / Rejected, and add a row to its quick-reference table and to `README.md`'s decisions table. Decisions are append-only.
+- **Status:** 🟢 Active, 🔴 Blocked, 🔵 Parked, ⚪ Done. Transition rules and priority levels are defined once, in each project's `status.md`.
+- **Wrap-up:** set the status to ⚪ with the date and move the row to `README.md`'s master index (`—` in `File` if no task file exists). If a task file exists, set its status field and append a final session-log entry.

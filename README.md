@@ -16,6 +16,8 @@ Personal Claude Code configuration — behavioral guidelines, custom skills, and
 
 Skills live in a separate repo and are linked here as a submodule. See [pytholic/claude-skills](https://github.com/pytholic/claude-skills) for the full list and install instructions.
 
+`CLAUDE.md` §2 imports the minimality ladder from `skills/shared/minimality-ladder.md`, and the skills point to it rather than carrying copies. This makes the submodule required: without it, the import is missing. Edit the ladder only in that file; nothing needs syncing.
+
 To clone this repo with skills included:
 
 ```bash
@@ -64,7 +66,7 @@ The wrapper script (`scripts/mcp-atlassian`) reads the token from Keychain and p
 
 Zed (`~/.config/zed/AGENTS.md`) and Cursor (`~/.cursor/rules/personal.mdc`) don't resolve Claude's `@` imports, so their global rules are generated from `CLAUDE.md` with imports inlined. The generated files are not committed.
 
-Run after cloning, and again after editing `CLAUDE.md` or `skills/shared/`:
+Run after cloning, and again after editing `CLAUDE.md` or the ladder in `skills/shared/minimality-ladder.md`:
 
 ```bash
 ~/.claude/scripts/sync_editor_rules.py
@@ -72,8 +74,14 @@ Run after cloning, and again after editing `CLAUDE.md` or `skills/shared/`:
 
 It needs the `skills` submodule (`git submodule update --init`) and exits with an error if an imported file is missing.
 
+## New machine checklist
+
+1. Clone with submodules (see [Skills](#skills)).
+2. Install the CLI tools that `CLAUDE.md` tells the agent to prefer over MCP servers: `git`, `gh` (run `gh auth login`), `jq`, and `ntn` (`npm i -g ntn`, then `ntn login`).
+3. Register the per-machine MCP servers: Context7 and mcp-atlassian (see [MCP Servers](#mcp-servers)). Server configs live in `~/.claude.json`, which is not committed.
+4. Run `~/.claude/scripts/sync_editor_rules.py` to generate the Zed and Cursor rule files (see [Editor rules](#editor-rules-zed-cursor)).
+5. Open Claude Code and check that `/permissions` shows the rules from `settings.json`.
+
 ## Agents
 
-- **code-reviewer** — Automated code quality review
-- **issue-analyzer-fixer** — Bug diagnosis and remediation
-- **test-runner** — Test execution and failure reporting
+- **test-runner** — Runs tests and reports only the failures, keeping verbose output out of the main conversation. Uses per-project memory (`.claude/agent-memory/test-runner/`).
